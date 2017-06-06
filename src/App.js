@@ -14,11 +14,10 @@ class App extends Component {
     };
   }
 
-  mudou(event) {
-
+  onChange(todoChecked) {
     const todoListUpdated = this.state.listTodo.map((todo) => {
-      if (todo.id == event.id)
-        todo.isComplete = event.checked;
+      if (todo.id === todoChecked.id)
+        todo.isComplete = !todoChecked.isComplete;
       return todo;
     });
 
@@ -36,7 +35,7 @@ class App extends Component {
       </fieldset>
       <ul>
         {this.state.listTodo.map(function (todo) {
-          return <Linhazinha key={todo.id} todo={todo} onMudouLinhazinha={this.mudou.bind(this)} />
+          return <Todo key={todo.id} {...todo} change={this.onChange.bind(this, todo)} />
         }.bind(this))}
       </ul>
     </div>
@@ -45,23 +44,16 @@ class App extends Component {
 
 export default App;
 
-class Linhazinha extends Component {
-  constructor(props) {
-    super(props);
-  }
-  checkboxHandler(event) {
-    this.props.onMudouLinhazinha(event.target)
-  }
+const Todo = props => {
 
-  render() {
-    return <li>
+  return (
+    <li>
       <input
         type="checkbox"
-        id={this.props.todo.id}
-        checked={this.props.todo.isComplete}
-        onChange={this.checkboxHandler.bind(this)}
-      />
-      {this.props.todo.text}
+        id={props.id}
+        checked={props.isComplete}
+        onChange={props.change.bind(this)} />
+      {props.text}
     </li>
-  }
+  )
 }  
